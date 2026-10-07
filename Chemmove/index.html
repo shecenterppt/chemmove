@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="th"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CHEMMOVE – Chemical Transport Management Portal</title>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);--navy:#102832;--yel:#F5C84B;--bg:#eef0f2;--card:#fff;--tx:#14232b;--mu:#5d6c74;--ln:#d9dee2;--red:#c62f2f;--amb:#b8860b;--grn:#1f8a4c;--in:#fff}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0b1a21;--card:#14262f;--tx:#e8eef1;--mu:#93a4ac;--ln:#26404b;--in:#0f1f27}}
+:root[data-theme="dark"]{--bg:#0b1a21;--card:#14262f;--tx:#e8eef1;--mu:#93a4ac;--ln:#26404b;--in:#0f1f27}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*:before,*:after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:'Chakra Petch',system-ui,-apple-system,Segoe UI,sans-serif;font-size:14px;display:flex;min-height:100vh}
+nav{width:230px;background:var(--navy);color:#fff;padding:20px 12px;flex:none;position:sticky;top:0;align-self:flex-start;min-height:100vh}
+.logo{font-weight:700;font-size:22px;letter-spacing:.06em;padding:0 10px 2px}.logo b{color:var(--yel)}
+.sub{font-size:11px;color:#9fb3bc;padding:0 10px 22px}
+nav button{display:block;width:100%;text-align:left;background:none;border:0;border-left:4px solid transparent;color:#cfdce2;font:inherit;font-weight:500;padding:11px 12px;cursor:pointer;border-radius:0 4px 4px 0}
+nav button:hover{background:#1b3a47}nav button.on{background:#1b3a47;border-left-color:var(--yel);color:#fff}
+main{flex:1;min-width:0;padding:24px 28px}
+h1{font-size:22px;margin:0 0 4px}.lead{color:var(--mu);margin:0 0 18px}
+.card{background:var(--card);border:1px solid var(--ln);border-radius:4px;padding:16px;margin-bottom:16px}
+.bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
+input,select{font:inherit;background:var(--in);color:var(--tx);border:1px solid var(--ln);border-radius:3px;padding:8px 10px;min-width:0}
+input:focus,select:focus,button:focus-visible{outline:2px solid var(--yel);outline-offset:1px}
+.grow{flex:1;min-width:180px}
+.btn{font:inherit;font-weight:600;border:1px solid var(--navy);background:var(--card);color:var(--tx);padding:8px 14px;border-radius:3px;cursor:pointer}
+.btn.p{background:var(--yel);border-color:var(--yel);color:#102832}.btn.d{background:var(--navy);color:#fff}.btn.x{border-color:var(--red);color:var(--red)}
+.btn.s{padding:4px 9px;font-size:12px}
+.tw{overflow-x:auto}table{border-collapse:collapse;width:100%;min-width:760px}
+th{background:var(--navy);color:#fff;text-align:left;font-weight:600;padding:9px 10px;white-space:nowrap}
+td{padding:8px 10px;border-bottom:1px solid var(--ln);vertical-align:middle}
+.tag{display:inline-block;padding:1px 8px;border-radius:10px;font-weight:600;font-size:12px;background:var(--yel);color:#102832}
+.tag.tc0{background:var(--red);color:#fff}.tag.off{background:var(--ln);color:var(--mu)}.tag.on{background:#d7efe0;color:#14612f}
+.empty{text-align:center;color:var(--mu);padding:26px}
+.grid{display:grid;grid-template-columns:1fr 1.5fr;gap:16px;align-items:start}
+.chem{display:flex;justify-content:space-between;gap:10px;align-items:center;border:1px solid var(--ln);border-left:4px solid var(--yel);padding:10px;margin-bottom:8px;border-radius:3px}
+.chem.tc0{border-left-color:var(--red)}.chem small{color:var(--mu);display:block}
+.list{max-height:520px;overflow:auto}
+.res{padding:14px 16px;border-radius:4px;color:#fff;font-weight:700;margin-bottom:12px}
+.res.red{background:var(--red)}.res.yellow{background:var(--yel);color:#102832}.res.green{background:var(--grn)}
+.res small{display:block;font-weight:500}
+.sum{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:8px;margin-bottom:12px}
+.sum div{border:1px solid var(--ln);padding:8px;border-radius:3px}.sum span{display:block;color:var(--mu);font-size:12px}.sum b{font-size:20px}
+.warn{border-left:4px solid var(--yel);background:var(--card);padding:12px 16px;font-size:12px;color:var(--mu);border-radius:3px}
+.warn ul{margin:6px 0 6px 18px;padding:0}
+.modal{position:fixed;inset:0;background:rgba(16,40,50,.65);display:none;align-items:center;justify-content:center;padding:16px;z-index:9}
+.modal.show{display:flex}.box{background:var(--card);border-top:5px solid var(--yel);border-radius:4px;padding:20px;width:100%;max-width:460px;max-height:90vh;overflow:auto}
+.box h2{margin:0 0 12px;font-size:18px}.box label{display:block;font-size:12px;color:var(--mu);margin:8px 0 3px}.box input,.box select{width:100%}
+.f2{display:grid;grid-template-columns:1fr 1fr;gap:0 10px}.err{color:var(--red);min-height:18px;font-size:12px;margin-top:6px}
+.acts{display:flex;gap:8px;justify-content:flex-end;margin-top:14px}
+#toast{position:fixed;bottom:calc(16px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);background:var(--navy);color:#fff;padding:10px 18px;border-radius:3px;display:none;z-index:10;border-left:4px solid var(--yel)}
+#rep{display:none}
+.cbc{display:none;width:34px}body.emon .cbc{display:table-cell}.cbc input{width:16px;height:16px;padding:0}.btn:disabled{opacity:.45;cursor:not-allowed}
+.tag.pe{background:#f59e0b;color:#102832}.tag.nd{background:#d6e8fb;color:#134a86}.prow td{background:rgba(245,158,11,.14)}
+.chem.pe{border-left-color:#f59e0b;background:rgba(245,158,11,.1)}.res.orange{background:#c2620a}
+.help{border-left:4px solid #f59e0b;background:var(--card);padding:12px 16px;font-size:12px;color:var(--mu);border-radius:3px;margin-bottom:16px}.help ul{margin:6px 0 0 18px;padding:0}
+.ic{display:inline-block;width:22px;text-align:center;margin-right:8px;color:var(--yel)}.lm{display:none;color:var(--yel)}
+nav .tg{width:36px;display:block;margin:16px 6px 0;border:1px solid #3a5d6b;border-radius:3px;padding:4px 0;text-align:center}
+nav{transition:width .2s}
+.emb{background:var(--yel);color:#102832;font-weight:600;padding:9px 12px;border-radius:3px;margin-bottom:12px}
+.lang{display:flex;gap:6px;margin-top:20px;padding:0 6px}.lang button{width:auto;border:1px solid #3a5d6b;border-radius:3px;padding:6px 12px}.lang button.on{background:var(--yel);color:#102832;border-color:var(--yel)}
+@media (min-width:861px){body.col nav{width:64px;padding:20px 6px}body.col .lb,body.col .sub{display:none}body.col .lm{display:block}body.col .logo{padding:0 0 18px;text-align:center}body.col nav button.nv{text-align:center;padding:11px 0}body.col .ic{margin:0}body.col nav .tg{margin:16px auto 0}body.col .lang{flex-direction:column;padding:0;gap:4px}body.col .lang button{width:100%;padding:6px 0;font-size:12px}}
+@media (max-width:860px){nav .tg{display:none}body{flex-direction:column}nav{width:100%;min-height:0;position:static;display:flex;flex-wrap:wrap;align-items:center;padding:10px}.sub{display:none}.logo{padding-right:14px}nav button{width:auto;border-left:0;border-bottom:3px solid transparent}nav button.on{border-bottom-color:var(--yel)}main{padding:16px}.grid{grid-template-columns:1fr}}
+@page{size:A4 landscape;margin:10mm}
+@media print{body{display:block;background:#fff}nav,main,.modal,#toast{display:none!important}#rep{display:block;color:#000;font-family:'Chakra Petch',sans-serif;padding:0}#rep tr{break-inside:avoid}#rep h1{font-size:20px}#rep b{-webkit-print-color-adjust:exact;print-color-adjust:exact}#rep table{min-width:0}#rep th{background:#102832!important;color:#fff!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+</style></head><body>
+<nav><div class="logo"><span class="lb">CHEM<b>MOVE</b></span><span class="lm">C</span></div><div class="sub">Chemical Transport Management Portal</div>
+<button id="n2" class="nv on" onclick="go(2)"><span class="ic">∑</span><span class="lb">ADR Calculator</span></button><button id="n1" class="nv" onclick="go(1)"><span class="ic">▤</span><span class="lb">Chemical Master Data</span></button><button id="tg" class="tg" onclick="togNav()">‹</button><div class="lang"><button id="lt" onclick="setL('th')">ไทย</button><button id="le" onclick="setL('en')">EN</button></div></nav>
+<main>
+<section id="v1"><h1>Chemical Master Data</h1><p class="lead">Maintain the chemical list used by the ADR calculator. Data lives in this browser; use CSV to move it.</p>
+<div class="card"><div class="emb" id="emb" hidden>Edit mode is on. You can add, edit, delete and import without entering the code again.</div><div class="bar" id="bulk" hidden><button class="btn x" id="bd" onclick="delSel()"></button><button class="btn x" onclick="delAll()">Delete all</button></div><div class="bar">
+<input id="q1" class="grow" placeholder="Search title, SDS no., UN number, proper shipping name" oninput="rT()">
+<select id="f1" onchange="rT()"><option value="">All</option><option>TC0</option><option>TC1</option><option>TC2</option><option>TC3</option><option>TC4</option><option value="Pending">Pending Classification</option><option value="NDG">Non-DG</option><option value="A">Active</option><option value="I">Inactive</option></select>
+<button class="btn d" id="eb" onclick="EM?setEM(false):auth(()=>setEM(true))"></button><button class="btn p" onclick="auth(()=>edit(-1))">Add chemical</button>
+<button class="btn" onclick="auth(()=>fi.click())">Import CSV</button>
+<button class="btn" onclick="expMaster()">Export CSV</button>
+<input type="file" id="fi" accept=".csv,text/csv" hidden></div>
+<div class="tw"><table><thead><tr><th class="cbc"><input type="checkbox" id="sa" onchange="selAll(this.checked)" aria-label="Select all"></th><th>Title</th><th>SDS No.</th><th>UN No.</th><th>Hazard Class</th><th>Packing Group</th><th>Transport Category</th><th>Classification Status</th><th>ADR Multiplier</th><th>Physical State</th><th>Default Unit</th><th>Status</th><th>Actions</th></tr></thead><tbody id="tb"></tbody></table></div>
+<div id="cnt" class="lead" style="margin:10px 0 0"></div></div><div class="help"></div></section>
+
+<section id="v2" hidden><h1>ADR 1.1.3.6 Mixed-Load Calculator</h1><p class="lead">Pick chemicals from the master data, enter quantities, and see the ADR points total.</p>
+<div class="grid"><div class="card"><div class="bar"><input id="q2" class="grow" placeholder="Search title, SDS no., UN number, shipping name" oninput="rC()">
+<select id="f2" onchange="rC()"><option value="">All TC</option><option>TC0</option><option>TC1</option><option>TC2</option><option>TC3</option><option>TC4</option><option value="Pending">Pending</option></select></div><div id="cl" class="list"></div></div>
+<div class="card"><div id="res"></div><div class="sum" id="sum"></div>
+<div class="tw"><table><thead><tr><th>Chemical</th><th>Quantity</th><th>Unit</th><th>ADR Multiplier</th><th>ADR Points</th><th></th></tr></thead><tbody id="ml"></tbody></table></div>
+<div class="bar" style="margin:12px 0 0"><button class="btn d" onclick="expAss()">Export CSV</button><button class="btn" onclick="prn()">Print report</button><button class="btn p" onclick="saveA()">Save assessment</button><button class="btn x" onclick="load=[];rM()">Clear load</button></div></div></div>
+<div class="help"></div><div class="warn"><b>Important</b><br>This tool performs ADR mathematical calculations based on Transport Category and ADR Multiplier only. The system does not verify:<ul><li>Limited Quantity (LQ)</li><li>Excepted Quantity (EQ)</li><li>Segregation</li><li>Tunnel Restrictions</li><li>Packaging Requirements</li><li>SDS Compliance</li><li>Transport Regulations</li></ul>Final evaluation shall be verified by DGSA or SHE before shipment.</div></section>
+</main>
+
+<div class="modal" id="mA"><div class="box"><h2>Enter Authorization Code</h2><input type="password" id="pw" placeholder="Authorization code" onkeydown="if(event.key==='Enter')okA()"><div class="err" id="pe"></div><div class="acts"><button class="btn" onclick="cl('mA')">Cancel</button><button class="btn p" onclick="okA()">Confirm</button></div></div></div>
+<div class="modal" id="mE"><div class="box"><h2 id="et">Add chemical</h2>
+<label>Title</label><input id="e_Title"><label>Proper shipping name</label><input id="e_ProperShippingName">
+<div class="f2"><div><label>SDS No.</label><input id="e_SDSNo"></div><div><label>UN number</label><input id="e_UNNumber"></div>
+<div><label>Hazard class</label><input id="e_HazardClass"></div><div><label>Packing group</label><select id="e_PackingGroup"><option value=""></option><option>I</option><option>II</option><option>III</option></select></div>
+<div><label>Transport category</label><select id="e_TransportCategory" onchange="stSync('tc')"><option>0</option><option>1</option><option>2</option><option>3</option><option>4</option><option value="Pending">Pending</option></select></div><div><label>ADR multiplier</label><input id="e_ADRMultiplier" type="number" min="0" step="any"></div>
+<div><label>Physical state</label><select id="e_PhysicalState"><option value="Solid">Solid</option><option value="Liquid">Liquid</option><option value="Gas">Gas</option></select></div><div><label>Default unit</label><select id="e_DefaultUnit"><option>kg</option><option>g</option><option>L</option><option>ml</option></select></div></div>
+<label>Classification status</label><select id="e_TransportClassificationStatus" onchange="stSync('st')"><option value="Verified">Verified</option><option value="Pending">Pending</option><option value="Non-DG">Non-DG</option></select><label><input type="checkbox" id="e_Active" style="width:auto"> Active</label><div class="err" id="ee"></div>
+<div class="acts"><button class="btn" onclick="cl('mE')">Cancel</button><button class="btn p" onclick="saveE()">Save chemical</button></div></div></div>
+<div class="modal" id="mW"><div class="box"><h2 id="wt"></h2><div id="wb" style="font-size:13px"></div><div class="acts"><button class="btn p" onclick="cl('mW')">OK</button></div></div></div>
+<div id="toast"></div><div id="rep"></div>
+
+<script>
+const PW='chem1234',H=['Title','SDSNo','UNNumber','ProperShippingName','HazardClass','PackingGroup','TransportCategory','ADRMultiplier','PhysicalState','DefaultUnit','Active','TransportClassificationStatus'];
+const DM={0:0,1:50,2:3,3:1,4:0};
+let D=[];
+let NC=false;try{NC=localStorage.getItem('chemmove_nav')==='1'}catch(e){}
+let load=[],pend=null,editIdx=-1,saved=[],EM=false;const SEL=new Set();
+let L='th';try{L=localStorage.getItem('chemmove_lang')==='en'?'en':'th'}catch(e){}
+const TH={"No chemicals yet. Import a CSV or add a chemical.":"ยังไม่มีข้อมูลสารเคมี นำเข้าไฟล์ CSV หรือเพิ่มสารเคมี","Delete selected": "ลบที่เลือก", "Delete all": "ลบทั้งหมด", "{0} chemicals deleted": "ลบสารเคมี {0} รายการแล้ว", "Delete {0} selected chemicals? This cannot be undone.": "ลบสารเคมีที่เลือก {0} รายการ? ไม่สามารถย้อนกลับได้", "Delete ALL {0} chemicals in the database? This cannot be undone. Export CSV first if you need a backup.": "ลบสารเคมีทั้งหมด {0} รายการในฐานข้อมูล? ไม่สามารถย้อนกลับได้ แนะนำให้ส่งออก CSV สำรองไว้ก่อน","Refer SDS No.":"อ้างอิงเลข SDS","ADR requirements apply":"ต้องปฏิบัติตามข้อกำหนด ADR","Exempt from ADR requirements":"ยกเว้นไม่ต้องปฏิบัติตามข้อกำหนด ADR","Classification Status": "สถานะการจัดประเภท", "Classification status": "สถานะการจัดประเภท", "Pending": "รอจัดประเภท", "Pending Classification": "รอจัดประเภท", "Verified": "ยืนยันแล้ว", "Classification Required": "ต้องจัดประเภทก่อน (Classification Required)", "ORANGE": "ส้ม", "Not calculated": "ไม่คำนวณ", "OK": "ตกลง", "ADR points not calculated while classification is pending": "ไม่คำนวณคะแนน ADR ขณะที่ยังไม่ได้จัดประเภท", "Classification guidance": "คำแนะนำการจัดประเภท", "Transport Category is not set. Check the SDS and transport information before use.": "ยังไม่ได้กำหนด Transport Category กรุณาตรวจสอบ SDS และข้อมูลการขนส่งก่อนใช้งาน", "UN Number not found. Check that the Transport Category is correct.": "ไม่พบ UN Number กรุณาตรวจสอบความถูกต้องของ Transport Category", "Some chemicals have no Transport Category yet. Review the data before calculating.": "มีสารเคมีที่ยังไม่ได้กำหนด Transport Category กรุณาทวนสอบข้อมูลก่อนคำนวณ", "Not having a UN Number or Packing Group does not mean Transport Category 0.": "การไม่มี UN Number หรือ Packing Group ไม่ได้หมายความว่าเป็น Transport Category 0", "Use TC0 only when ADR specifies Transport Category 0.": "ใช้ TC0 เฉพาะเมื่อ ADR ระบุว่าเป็น Transport Category 0 เท่านั้น", "For non-dangerous goods, use TC4 and ADR Multiplier = 0.": "สำหรับสารที่ไม่เป็น Dangerous Goods ให้ใช้ TC4 และ ADR Multiplier = 0", "For unclassified substances, use the status Pending Classification.": "สำหรับสารที่ยังไม่ได้จัดประเภท ให้ใช้สถานะ Pending Classification", "Select Transport Category 0–4, or set status to Pending.": "เลือก Transport Category 0–4 หรือเปลี่ยนสถานะเป็น Pending", "TC0 can only be used when the classification is Verified and both UN Number and Proper Shipping Name are provided. Do not use TC0 as a placeholder for missing information.": "ใช้ TC0 ได้เฉพาะเมื่อสถานะ Verified และมี UN Number กับ Proper Shipping Name ครบ ห้ามใช้ TC0 แทนข้อมูลที่ยังไม่มี", "TC0 requires a verified classification with UN Number and Proper Shipping Name. Please review.": "TC0 ต้องเป็นสารที่ยืนยันการจัดประเภทแล้ว และมี UN Number กับ Proper Shipping Name ครบ กรุณาตรวจสอบ", "Imported as Pending Classification (includes blank Transport Category):": "นำเข้าเป็น Pending Classification (รวมรายการที่ไม่ระบุ Transport Category):","Collapse sidebar":"ย่อเมนู","Expand sidebar":"ขยายเมนู","Edit mode":"โหมดแก้ไข","Exit edit mode":"ออกจากโหมดแก้ไข","Edit mode on":"เปิดโหมดแก้ไขแล้ว","Edit mode off":"ออกจากโหมดแก้ไขแล้ว","Edit mode is on. You can add, edit, delete and import without entering the code again.":"โหมดแก้ไขเปิดอยู่ คุณเพิ่ม แก้ไข ลบ และนำเข้าข้อมูลได้ทันทีโดยไม่ต้องกรอกรหัสอีก","CHEMMOVE – Chemical Transport Management Portal": "CHEMMOVE – ระบบบริหารจัดการการขนส่งสารเคมี", "Chemical Transport Management Portal": "ระบบบริหารจัดการการขนส่งสารเคมี", "Chemical Master Data": "ข้อมูลหลักสารเคมี", "ADR Calculator": "เครื่องคำนวณ ADR", "Maintain the chemical list used by the ADR calculator. Data lives in this browser; use CSV to move it.": "จัดการรายการสารเคมีที่ใช้คำนวณ ADR ข้อมูลเก็บอยู่ในเบราว์เซอร์นี้ ใช้ไฟล์ CSV เพื่อย้ายข้อมูล", "Search title, SDS no., UN number, proper shipping name": "ค้นหาชื่อ เลข SDS เลข UN หรือชื่อทางการขนส่ง", "Search title, SDS no., UN number, shipping name": "ค้นหาชื่อ เลข SDS เลข UN หรือชื่อทางการขนส่ง", "All": "ทั้งหมด", "Active": "ใช้งาน", "Inactive": "ไม่ใช้งาน", "Add chemical": "เพิ่มสารเคมี", "Edit chemical": "แก้ไขสารเคมี", "Import CSV": "นำเข้า CSV", "Export CSV": "ส่งออก CSV", "Title": "ชื่อสารเคมี", "SDS No.": "เลข SDS", "UN No.": "เลข UN", "Hazard Class": "ประเภทความเป็นอันตราย", "Packing Group": "กลุ่มการบรรจุ", "Transport Category": "หมวดการขนส่ง", "ADR Multiplier": "ตัวคูณ ADR", "Physical State": "สถานะทางกายภาพ", "Default Unit": "หน่วยเริ่มต้น", "Status": "สถานะ", "Actions": "การดำเนินการ", "ADR 1.1.3.6 Mixed-Load Calculator": "เครื่องคำนวณการขนส่งสินค้าผสม ADR 1.1.3.6", "Pick chemicals from the master data, enter quantities, and see the ADR points total.": "เลือกสารเคมีจากข้อมูลหลัก กรอกปริมาณ แล้วดูคะแนน ADR รวม", "All TC": "ทุกหมวด TC", "Chemical": "สารเคมี", "Quantity": "ปริมาณ", "Unit": "หน่วย", "ADR Points": "คะแนน ADR", "Print report": "พิมพ์รายงาน", "Save assessment": "บันทึกการประเมิน", "Clear load": "ล้างรายการ", "Important": "ข้อควรทราบ", "This tool performs ADR mathematical calculations based on Transport Category and ADR Multiplier only. The system does not verify:": "เครื่องมือนี้คำนวณคะแนน ADR ทางคณิตศาสตร์จากหมวดการขนส่งและตัวคูณ ADR เท่านั้น ระบบไม่ได้ตรวจสอบ:", "Limited Quantity (LQ)": "ปริมาณจำกัด (LQ)", "Excepted Quantity (EQ)": "ปริมาณยกเว้น (EQ)", "Segregation": "การแยกการบรรทุก", "Tunnel Restrictions": "ข้อจำกัดการผ่านอุโมงค์", "Packaging Requirements": "ข้อกำหนดด้านบรรจุภัณฑ์", "SDS Compliance": "การปฏิบัติตาม SDS", "Transport Regulations": "กฎระเบียบการขนส่ง", "Final evaluation shall be verified by DGSA or SHE before shipment.": "การประเมินขั้นสุดท้ายต้องได้รับการตรวจสอบโดย DGSA หรือ SHE ก่อนการจัดส่ง", "Enter Authorization Code": "กรอกรหัสอนุญาต", "Authorization code": "รหัสอนุญาต", "Cancel": "ยกเลิก", "Confirm": "ยืนยัน", "Proper shipping name": "ชื่อทางการขนส่ง", "UN number": "เลข UN", "Hazard class": "ประเภทความเป็นอันตราย", "Packing group": "กลุ่มการบรรจุ", "Transport category": "หมวดการขนส่ง", "ADR multiplier": "ตัวคูณ ADR", "Physical state": "สถานะ", "Default unit": "หน่วยเริ่มต้น", "Save chemical": "บันทึกสารเคมี", "Solid": "ของแข็ง", "Liquid": "ของเหลว", "Gas": "ก๊าซ", "Edit": "แก้ไข", "Delete": "ลบ", "Remove": "ลบออก", "+ Add": "+ เพิ่ม", "Class": "ประเภท", "PG": "กลุ่มบรรจุ", "Multiplier": "ตัวคูณ", "count": "จำนวน", "ADR total points": "คะแนน ADR รวม", "Risk level": "ระดับความเสี่ยง", "Risk Level": "ระดับความเสี่ยง", "High Risk": "เสี่ยงสูงมาก", "High": "สูง", "Medium": "ปานกลาง", "Low": "ต่ำ", "RED": "แดง", "YELLOW": "เหลือง", "GREEN": "เขียว", "Contains Transport Category 0 chemical": "มีสารเคมีหมวดการขนส่ง 0", "Not eligible for Small-load Exemption": "ไม่เข้าเกณฑ์ยกเว้นการขนส่งปริมาณน้อย", "Approaching ADR threshold": "ใกล้ถึงเกณฑ์ ADR", "Below ADR threshold": "ต่ำกว่าเกณฑ์ ADR", "ADR points · threshold 1000": "คะแนน ADR · เกณฑ์ 1000", "No chemicals match. Clear the filter or add a chemical.": "ไม่พบสารเคมีที่ตรงกัน ลองล้างตัวกรองหรือเพิ่มสารเคมี", "No active chemicals match.": "ไม่พบสารเคมีที่ใช้งานและตรงกัน", "No chemicals in the load. Choose one on the left and select + Add.": "ยังไม่มีสารเคมีในรายการขนส่ง เลือกจากฝั่งซ้ายแล้วกด + เพิ่ม", "{0} of {1} chemicals shown": "แสดง {0} จาก {1} รายการ", "Chemical saved": "บันทึกสารเคมีแล้ว", "Chemical deleted": "ลบสารเคมีแล้ว", "CSV has no data rows": "ไฟล์ CSV ไม่มีข้อมูล", "CSV needs a Title column": "ไฟล์ CSV ต้องมีคอลัมน์ Title", "Already in the load": "มีอยู่ในรายการแล้ว", "Add at least one chemical first": "กรุณาเพิ่มสารเคมีอย่างน้อย 1 รายการ", "Assessment saved and downloaded": "บันทึกและดาวน์โหลดการประเมินแล้ว", "Incorrect code. Access denied.": "รหัสไม่ถูกต้อง ไม่อนุญาตให้เข้าถึง", "Title is required.": "กรุณากรอกชื่อสารเคมี", "Enter a numeric ADR multiplier.": "กรุณากรอกตัวคูณ ADR เป็นตัวเลข", "Delete \"{0}\"? Any load using it will also be cleared of it.": "ลบ \"{0}\" หรือไม่? สารเคมีนี้จะถูกนำออกจากรายการขนส่งด้วย", "Import {0} chemicals? OK replaces the current list. Cancel adds them to it.": "นำเข้า {0} รายการ? กด ตกลง เพื่อแทนที่รายการปัจจุบัน หรือ ยกเลิก เพื่อเพิ่มต่อท้าย", "{0} chemicals imported": "นำเข้า {0} รายการแล้ว", "CHEMMOVE ADR Assessment": "การประเมิน ADR โดย CHEMMOVE", "Date": "วันที่", "UN Number": "เลข UN", "ADR Total Points": "คะแนน ADR รวม", "Result": "ผลการประเมิน", "CHEMMOVE – ADR 1.1.3.6 Assessment Report": "CHEMMOVE – รายงานการประเมิน ADR 1.1.3.6", "This tool performs ADR mathematical calculations based on Transport Category and ADR Multiplier only. It does not verify LQ, EQ, segregation, tunnel restrictions, packaging, SDS compliance or transport regulations. Final evaluation shall be verified by DGSA or SHE before shipment.": "เครื่องมือนี้คำนวณคะแนน ADR ทางคณิตศาสตร์จากหมวดการขนส่งและตัวคูณ ADR เท่านั้น ไม่ได้ตรวจสอบ LQ, EQ, การแยกการบรรทุก, ข้อจำกัดอุโมงค์, บรรจุภัณฑ์, การปฏิบัติตาม SDS หรือกฎระเบียบการขนส่ง การประเมินขั้นสุดท้ายต้องได้รับการตรวจสอบโดย DGSA หรือ SHE ก่อนการจัดส่ง"};
+const t=(s,...a)=>{let r=(L==='th'&&TH[s])||s;a.forEach((v,i)=>r=r.replace('{'+i+'}',v));return r};
+function applyL(){document.documentElement.lang=L;document.title=t('CHEMMOVE – Chemical Transport Management Portal');
+ const w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);let n;
+ while(n=w.nextNode()){const p=n.parentElement;if(!p||/^(SCRIPT|STYLE)$/.test(p.tagName)||p.closest('#tb,#cl,#ml,#res,#sum,#rep,#cnt,#toast,#et,#eb,#bd,#wt,#wb,.help'))continue;
+  if(n._o===undefined)n._o=n.nodeValue;const k=n._o.trim();if(!k)continue;n.nodeValue=(L==='th'&&TH[k])?n._o.replace(k,TH[k]):n._o}
+ document.querySelectorAll('[placeholder]').forEach(e=>{e.dataset.o=e.dataset.o||e.placeholder;e.placeholder=t(e.dataset.o)});
+ $('et').textContent=t(editIdx<0?'Add chemical':'Edit chemical');
+ updEM();updNav();rH();$('lt').className=L==='th'?'on':'';$('le').className=L==='en'?'on':''}
+function togNav(){NC=!NC;try{localStorage.setItem('chemmove_nav',NC?'1':'0')}catch(e){}updNav()}
+function updNav(){document.body.classList.toggle('col',NC);const g=$('tg');g.textContent=NC?'›':'‹';g.title=t(NC?'Expand sidebar':'Collapse sidebar');g.setAttribute('aria-label',g.title);document.querySelectorAll('nav button.nv').forEach(b=>b.title=b.querySelector('.lb').textContent)}
+const HK=['Not having a UN Number or Packing Group does not mean Transport Category 0.','Use TC0 only when ADR specifies Transport Category 0.','For non-dangerous goods, use TC4 and ADR Multiplier = 0.','For unclassified substances, use the status Pending Classification.'];
+function rH(){document.querySelectorAll('.help').forEach(e=>e.innerHTML='<b>'+t('Classification guidance')+'</b><ul>'+HK.map(k=>'<li>'+t(k)+'</li>').join('')+'</ul>')}
+function updEM(){const b=$('eb');b.textContent=t(EM?'Exit edit mode':'Edit mode');b.className=EM?'btn x':'btn d';$('emb').hidden=!EM;document.body.classList.toggle('emon',EM);$('bulk').hidden=!EM}
+function setEM(v){EM=v;if(!v)SEL.clear();updEM();rT();toast(t(v?'Edit mode on':'Edit mode off'))}
+function setL(l){L=l;try{localStorage.setItem('chemmove_lang',l)}catch(e){}applyL();rT();rC();rM()}
+
+const $=i=>document.getElementById(i),esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function toast(m,ms){const t=$('toast');t.textContent=m;t.style.display='block';clearTimeout(t._h);t._h=setTimeout(()=>t.style.display='none',ms||2600)}
+function go(n){$('v1').hidden=n!==1;$('v2').hidden=n!==2;$('n1').className=n===1?'nv on':'nv';$('n2').className=n===2?'nv on':'nv';if(n===2){rC();rM()}}
+function cl(i){$(i).classList.remove('show')}
+function auth(fn){if(EM){fn();return}pend=fn;$('pw').value='';$('pe').textContent='';$('mA').classList.add('show');$('pw').focus()}
+function okA(){if($('pw').value===PW){cl('mA');const f=pend;pend=null;f&&f()}else $('pe').textContent=t('Incorrect code. Access denied.')}
+const isP=c=>c.TransportCategory==='Pending'||c.TransportClassificationStatus==='Pending',isND=c=>c.TransportClassificationStatus==='Non-DG',
+tcv=c=>isP(c)?'Pending':isND(c)?'4':String(c.TransportCategory),tc=c=>isP(c)?'Pending':'TC'+tcv(c),
+mult=c=>{if(isP(c)||isND(c))return 0;const m=parseFloat(c.ADRMultiplier);return isNaN(m)?(DM[c.TransportCategory]??0):m},
+stb=c=>isP(c)?`<span class="tag pe">⚠ ${t('Pending Classification')}</span>`:isND(c)?'<span class="tag nd">Non-DG</span>':`<span class="tag on">${t('Verified')}</span>`;
+function match(c,q,f){q=q.toLowerCase();if(q&&![c.Title,c.SDSNo,c.UNNumber,c.ProperShippingName].some(v=>String(v||'').toLowerCase().includes(q)))return false;
+ if(!f)return true;if(f==='A')return c.Active;if(f==='I')return !c.Active;if(f==='NDG')return isND(c);return tc(c)===f}
+function rT(){const r=D.map((c,i)=>[c,i]).filter(([c])=>match(c,$('q1').value.trim(),$('f1').value));
+ $('tb').innerHTML=r.length?r.map(([c,i])=>`<tr class="${isP(c)?'prow':''}"><td class="cbc"><input type="checkbox" ${SEL.has(c)?'checked':''} onchange="selOne(${i},this.checked)"></td><td><b>${esc(c.Title)}</b><br><small>${esc(c.ProperShippingName)}</small></td><td>${esc(c.SDSNo)}</td><td>${esc(c.UNNumber)}</td><td>${esc(c.HazardClass)}</td><td>${esc(c.PackingGroup)}</td><td>${isP(c)?`<span class="tag pe">⚠ ${t('Pending')}</span>`:`<span class="tag ${tcv(c)==='0'?'tc0':''}">${tc(c)}</span>`}</td><td>${stb(c)}</td><td>${isP(c)?'–':esc(c.ADRMultiplier)}</td><td>${esc(t(c.PhysicalState))}</td><td>${esc(c.DefaultUnit)}</td><td><span class="tag ${c.Active?'on':'off'}">${t(c.Active?'Active':'Inactive')}</span></td><td style="white-space:nowrap"><button class="btn s" onclick="auth(()=>edit(${i}))">${t('Edit')}</button> <button class="btn s x" onclick="auth(()=>del(${i}))">${t('Delete')}</button></td></tr>`).join(''):'<tr><td colspan="13" class="empty">'+t(D.length?'No chemicals match. Clear the filter or add a chemical.':'No chemicals yet. Import a CSV or add a chemical.')+'</td></tr>';
+ $('cnt').textContent=t('{0} of {1} chemicals shown',r.length,D.length);updBulk()}
+function edit(i){editIdx=i;const c=i<0?{TransportCategory:'2',ADRMultiplier:'3',PhysicalState:'Solid',DefaultUnit:'kg',Active:true,TransportClassificationStatus:'Verified'}:D[i];
+ $('et').textContent=t(i<0?'Add chemical':'Edit chemical');H.forEach(h=>{const e=$('e_'+h);h==='Active'?e.checked=!!c[h]:e.value=c[h]??''});$('ee').textContent='';$('mE').classList.add('show')}
+function stSync(src){const st=$('e_TransportClassificationStatus'),tcs=$('e_TransportCategory'),m=$('e_ADRMultiplier');
+ if(src==='st'){if(st.value==='Pending'){tcs.value='Pending';m.value=''}else if(st.value==='Non-DG'){tcs.value='4';m.value='0'}}
+ else if(tcs.value==='Pending'){st.value='Pending';m.value=''}else{if(st.value==='Pending')st.value='Verified';if(m.value==='')m.value=DM[tcs.value]}}
+function saveE(){const c={};H.forEach(h=>{const e=$('e_'+h);c[h]=h==='Active'?e.checked:e.value.trim()});
+ if(!c.Title){$('ee').textContent=t('Title is required.');return}
+ if(c.TransportClassificationStatus==='Pending'||c.TransportCategory==='Pending'){c.TransportCategory='Pending';c.TransportClassificationStatus='Pending';c.ADRMultiplier=''}
+ else{
+  if(!/^[0-4]$/.test(c.TransportCategory)){$('ee').textContent=t('Select Transport Category 0–4, or set status to Pending.');return}
+  if(c.ADRMultiplier===''||isNaN(+c.ADRMultiplier)){$('ee').textContent=t('Enter a numeric ADR multiplier.');return}
+  if(c.TransportCategory==='0'&&(c.TransportClassificationStatus!=='Verified'||!c.UNNumber||!c.ProperShippingName)){$('ee').textContent=t('TC0 can only be used when the classification is Verified and both UN Number and Proper Shipping Name are provided. Do not use TC0 as a placeholder for missing information.');return}}
+ editIdx<0?D.push(c):D[editIdx]=c;cl('mE');rT();const w=!c.UNNumber&&c.TransportClassificationStatus==='Verified';toast(t('Chemical saved')+(w?' — '+t('UN Number not found. Check that the Transport Category is correct.'):''),w?6000:0)}
+function del(i){if(confirm(t('Delete "{0}"? Any load using it will also be cleared of it.',D[i].Title))){const t=D[i];D.splice(i,1);load=load.filter(l=>l.c!==t);rT();toast(t('Chemical deleted'))}}
+function parseCSV(t){const rows=[];let r=[],f='',q=false;t=t.replace(/^\uFEFF/,'');
+ for(let i=0;i<t.length;i++){const ch=t[i];if(q){if(ch==='"'){if(t[i+1]==='"'){f+='"';i++}else q=false}else f+=ch}
+ else if(ch==='"')q=true;else if(ch===','){r.push(f);f=''}else if(ch==='\n'||ch==='\r'){if(ch==='\r'&&t[i+1]==='\n')i++;r.push(f);f='';if(r.some(x=>x!==''))rows.push(r);r=[]}else f+=ch}
+ r.push(f);if(r.some(x=>x!==''))rows.push(r);return rows}
+const csvEsc=v=>{v=String(v??'');return /[",\n\r]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v};
+function dl(name,text,type){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\uFEFF'+text],{type:type||'text/csv'}));a.download=name;document.body.appendChild(a);a.click();a.remove()}
+$('fi').onchange=e=>{const f=e.target.files[0];if(!f)return;const rd=new FileReader();rd.onload=()=>{
+ const rows=parseCSV(rd.result);if(rows.length<2){toast(t('CSV has no data rows'));return}
+ const hd=rows[0].map(x=>x.trim().toLowerCase());if(!hd.includes('title')){toast(t('CSV needs a Title column'));return}
+ const n=rows.slice(1).map(r=>{const c={};H.forEach(h=>{const k=hd.indexOf(h.toLowerCase());c[h]=k<0?'':(r[k]||'').trim()});
+  c.Active=!/^(false|0|no|inactive)$/i.test(c.Active||'true');normC(c);c.DefaultUnit=c.DefaultUnit||'kg';c.PhysicalState=c.PhysicalState||'Solid';return c}).filter(c=>c.Title);
+ const w1=n.filter(c=>!c.UNNumber&&/^[0-4]$/.test(c.TransportCategory)&&c.TransportClassificationStatus!=='Non-DG'),w0=n.filter(c=>c.TransportCategory==='0'&&(c.TransportClassificationStatus!=='Verified'||!c.UNNumber||!c.ProperShippingName)),np=n.filter(isP).length;
+ if(confirm(t('Import {0} chemicals? OK replaces the current list. Cancel adds them to it.',n.length))){D=n;load=[]}else D=D.concat(n);
+ rT();impDone(n.length,w1,w0,np)};rd.readAsText(f);e.target.value=''};
+function vis(){return D.filter(c=>match(c,$('q1').value.trim(),$('f1').value))}
+function updBulk(){SEL.forEach(c=>{if(!D.includes(c))SEL.delete(c)});const n=SEL.size,v=vis(),k=v.filter(c=>SEL.has(c)).length,sa=$('sa'),b=$('bd');
+ b.textContent=t('Delete selected')+' ('+n+')';b.disabled=!n;sa.checked=v.length>0&&k===v.length;sa.indeterminate=k>0&&k<v.length}
+function selOne(i,v){v?SEL.add(D[i]):SEL.delete(D[i]);updBulk()}
+function selAll(v){vis().forEach(c=>v?SEL.add(c):SEL.delete(c));rT()}
+function afterDel(n){load=load.filter(l=>D.includes(l.c));SEL.clear();rT();rC();rM();toast(t('{0} chemicals deleted',n))}
+function delSel(){auth(()=>{const n=SEL.size;if(!n)return;if(confirm(t('Delete {0} selected chemicals? This cannot be undone.',n))){D=D.filter(c=>!SEL.has(c));afterDel(n)}})}
+function delAll(){auth(()=>{const n=D.length;if(!n)return;if(confirm(t('Delete ALL {0} chemicals in the database? This cannot be undone. Export CSV first if you need a backup.',n))){D=[];afterDel(n)}})}
+function normC(c){let x=(c.TransportCategory||'').replace(/^tc/i,'').trim(),st=(c.TransportClassificationStatus||'').trim();
+ st=/^pending/i.test(st)?'Pending':/^non-?dg$/i.test(st)?'Non-DG':'Verified';
+ if(/^pending$/i.test(x))x='Pending';if(st==='Non-DG'&&x==='')x='4';
+ if(st==='Pending'||!/^[0-4]$/.test(x))x='Pending';if(x==='Pending')st='Pending';
+ c.TransportCategory=x;c.TransportClassificationStatus=st;
+ if(st==='Pending')c.ADRMultiplier='';else if(c.ADRMultiplier==='')c.ADRMultiplier=st==='Non-DG'?'0':String(DM[x]??0)}
+function impDone(N,w1,w0,np){if(!w1.length&&!w0.length&&!np){toast(t('{0} chemicals imported',N));return}
+ const ls=a=>'<ul>'+a.slice(0,12).map(c=>'<li>'+esc(c.Title)+'</li>').join('')+(a.length>12?'<li>… +'+(a.length-12)+'</li>':'')+'</ul>';let h='';
+ if(w1.length)h+='<p><b>⚠ '+esc(t('UN Number not found. Check that the Transport Category is correct.'))+'</b> ('+w1.length+')</p>'+ls(w1);
+ if(w0.length)h+='<p><b>⚠ '+esc(t('TC0 requires a verified classification with UN Number and Proper Shipping Name. Please review.'))+'</b> ('+w0.length+')</p>'+ls(w0);
+ if(np)h+='<p><b>⚠ '+esc(t('Imported as Pending Classification (includes blank Transport Category):'))+'</b> '+np+'</p>';
+ $('wt').textContent=t('{0} chemicals imported',N);$('wb').innerHTML=h;$('mW').classList.add('show')}
+function expMaster(){dl('chemical_master.csv',[H.join(',')].concat(D.map(c=>H.map(h=>h==='Active'?(c[h]?'TRUE':'FALSE'):csvEsc(c[h])).join(','))).join('\r\n'))}
+function rC(){const r=D.filter(c=>c.Active&&match(c,$('q2').value.trim(),$('f2').value));
+ $('cl').innerHTML=r.length?r.map(c=>`<div class="chem ${tcv(c)==='0'?'tc0':isP(c)?'pe':''}"><div><b>${esc(c.Title)}</b><small>UN ${esc(c.UNNumber||'–')} · SDS ${esc(c.SDSNo||'–')} · ${t('Class')} ${esc(c.HazardClass||'–')} · ${t('PG')} ${esc(c.PackingGroup||'–')}</small><small>${isP(c)||isND(c)?stb(c):`<span class="tag ${tcv(c)==='0'?'tc0':''}">${tc(c)}</span>`} ${t('Multiplier')} ${isP(c)?'–':esc(c.ADRMultiplier)}</small></div><button class="btn p s" onclick="addL(${D.indexOf(c)})">${t('+ Add')}</button></div>`).join(''):'<div class="empty">'+t('No active chemicals match.')+'</div>'}
+function addL(i){const c=D[i];if(load.some(l=>l.c===c)){toast(t('Already in the load'));return}load.push({c,q:1,u:c.DefaultUnit||'kg'});rM();if(isP(c))toast(t('Transport Category is not set. Check the SDS and transport information before use.'),6000)}
+const toBase=(q,u)=>u==='g'||u==='ml'?q/1000:q;
+const pts=l=>toBase(l.q,l.u)*mult(l.c),pf=l=>isP(l.c)?'–':fmt(pts(l));
+function calc(){const cnt=[0,0,0,0,0];let tot=0,pc=0;load.forEach(l=>{if(isP(l.c)){pc++;return}cnt[+tcv(l.c)]++;tot+=pts(l)});
+ let lv,cls,msg;
+ if(pc){lv='Classification Required';cls='orange';msg=t('Some chemicals have no Transport Category yet. Review the data before calculating.')}
+ else if(cnt[0]){lv='High Risk';cls='red';msg=t('Contains Transport Category 0 chemical')+(tot>=1000?'. '+t('Not eligible for Small-load Exemption'):'')}
+ else if(tot>=1000){lv='High';cls='red';msg=t('Not eligible for Small-load Exemption')}
+ else if(tot>=800){lv='Medium';cls='yellow';msg=t('Approaching ADR threshold')}
+ else{lv='Low';cls='green';msg=t('Below ADR threshold')}
+ return{cnt,tot,lv,cls,msg,pc,blk:pc>0}}
+function rM(){const k=calc();
+ $('ml').innerHTML=load.length?load.map((l,i)=>`<tr class="${isP(l.c)?'prow':''}"><td><b>${esc(l.c.Title)}</b><br><small>${isP(l.c)?'⚠ '+t('Pending Classification'):tc(l.c)}</small></td><td><input type="number" min="0" step="any" value="${l.q}" style="width:100px" oninput="setQ(${i},this.value)"></td><td><select onchange="setU(${i},this.value)">${['kg','g','L','ml'].map(u=>`<option ${u===l.u?'selected':''}>${u}</option>`).join('')}</select></td><td>${isP(l.c)?'–':mult(l.c)}</td><td id="p${i}"><b>${pf(l)}</b></td><td><button class="btn s x" onclick="load.splice(${i},1);rM()">${t('Remove')}</button></td></tr>`).join(''):'<tr><td colspan="6" class="empty">'+t('No chemicals in the load. Choose one on the left and select + Add.')+'</td></tr>';
+ sumU(k)}
+const fmt=n=>(Math.round(n*100)/100).toLocaleString();
+function sumU(k){k=k||calc();const ap=!k.blk&&(k.cnt[0]||k.tot>=1000),hd=k.blk?k.msg:ap?t('ADR requirements apply'):t('Exempt from ADR requirements'),rc=k.blk?'orange':ap?'red':'green',ex=!k.blk&&(k.cnt[0]||(k.tot>=800&&k.tot<1000))?' · '+k.msg:'';
+ $('res').innerHTML=load.length?`<div class="res ${rc}">${esc(hd)}<small>${k.blk?t('ADR points not calculated while classification is pending'):fmt(k.tot)+' '+t('ADR points · threshold 1000')+esc(ex)}</small></div>`:'';
+ $('sum').innerHTML=`<div><span>${t('ADR total points')}</span><b>${k.blk?'–':fmt(k.tot)}</b></div>${k.cnt.map((n,i)=>`<div><span>TC${i} ${t('count')}</span><b>${n}</b></div>`).join('')}<div><span>${t('Pending')} ${t('count')}</span><b>${k.pc}</b></div><div><span>${t('Risk level')}</span><b>${load.length?t(k.lv):'–'}</b></div>`}
+function setQ(i,v){load[i].q=Math.max(0,parseFloat(v)||0);$('p'+i).innerHTML='<b>'+pf(load[i])+'</b>';sumU()}
+function setU(i,v){load[i].u=v;$('p'+i).innerHTML='<b>'+pf(load[i])+'</b>';sumU()}
+function rows(){return load.map(l=>[l.c.Title,l.c.UNNumber,isP(l.c)?t('Pending'):tc(l.c),l.q,l.u,isP(l.c)?'–':mult(l.c),isP(l.c)?t('Not calculated'):Math.round(pts(l)*100)/100])}
+function need(){if(!load.length){toast(t('Add at least one chemical first'));return false}return true}
+function expAss(){if(!need())return;const k=calc(),d=new Date().toLocaleString(L==='th'?'th-TH':'en-GB');
+ const out=[[t('CHEMMOVE ADR Assessment')],[t('Date'),d],[],['Chemical','UN Number','Transport Category','Quantity','Unit','ADR Multiplier','ADR Points'].map(x=>t(x))].concat(rows(),[[],[t('ADR Total Points'),k.blk?t('Not calculated'):Math.round(k.tot*100)/100],[t('Result'),k.msg],[t('Risk Level'),t(k.lv)],[],[t('Final evaluation shall be verified by DGSA or SHE before shipment.')]]);
+ dl('adr_assessment_'+new Date().toISOString().slice(0,10)+'.csv',out.map(r=>r.map(csvEsc).join(',')).join('\r\n'))}
+function saveA(){if(!need())return;const k=calc();saved.push({date:new Date().toISOString(),rows:rows(),total:k.blk?null:k.tot,result:k.msg,risk:k.lv});
+ try{localStorage.setItem('chemmove_assessments',JSON.stringify(saved))}catch(e){}
+ dl('adr_assessment_saved_'+saved.length+'.json',JSON.stringify(saved[saved.length-1],null,2),'application/json');toast(t('Assessment saved and downloaded'))}
+function prn(){if(!need())return;const k=calc();const rr=rows().map((r,i)=>{const a=r.slice();a.splice(1,0,load[i].c.SDSNo||'–');return a});
+ const rs=k.blk?{x:k.msg,c:'#c2620a'}:(k.cnt[0]||k.tot>=1000)?{x:t('ADR requirements apply'),c:'#c62f2f'}:{x:t('Exempt from ADR requirements'),c:'#1f8a4c'};
+ $('rep').innerHTML=`<h1>${t('CHEMMOVE – ADR 1.1.3.6 Assessment Report')}</h1><p>${t('Date')}: ${new Date().toLocaleString(L==='th'?'th-TH':'en-GB')}</p><table border="1" cellspacing="0" cellpadding="6" style="width:100%"><thead><tr>${['Chemical','Refer SDS No.','UN Number','TC','Quantity','Unit','ADR Multiplier','ADR Points'].map(x=>'<th>'+esc(t(x))+'</th>').join('')}</tr></thead><tbody>${rr.map(r=>'<tr>'+r.map(v=>'<td>'+esc(v)+'</td>').join('')+'</tr>').join('')}</tbody></table><h2>${t('ADR Total Points')}: ${k.blk?t('Not calculated'):fmt(k.tot)}</h2><p><b>${t('Result')}:</b> <b style="color:${rs.c}">${esc(rs.x)}</b><br><b>${t('Risk Level')}:</b> ${t(k.lv)}</p>`;
+ window.print()}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')['mA','mE','mW'].forEach(cl)});
+try{const s=JSON.parse(localStorage.getItem('chemmove_assessments')||'[]');if(Array.isArray(s))saved=s}catch(e){}
+setL(L);go(2);
+</script></body></html>
